@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ddoseur
+  name: ddoseur
+spec:
+  replicas: 10 # Changer le nombre de réplicas à 10
+  selector:
+    matchLabels:
+      app: ddoseur
+  template:
+    metadata:
+      labels:
+        app: ddoseur
+    spec:
+      containers:
+      - image: busybox:1.28
+        name: ddoseur
+        command: ["/bin/sh", "-c"]
+        args:
+        - while true; do wget -q -O- http://prometheus:9090; done

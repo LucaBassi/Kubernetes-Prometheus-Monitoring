@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+#  annotations:
+#    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: demo-localhost
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: demo.localdev.me
+      http:
+        paths:
+          - path: /prometheus
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  number: 9090
+          - path: /grafana
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000

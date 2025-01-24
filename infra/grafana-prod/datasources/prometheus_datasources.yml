@@ -1,0 +1,9 @@
+datasources:
+- name: Prometheus
+  basicAuth: true
+  basicAuthUser: admin
+  basicAuthPassword: 'Pa$$w0rd'
+  access: proxy
+  type: prometheus
+  url: http://prometheus:9091
+  isDefault: true

@@ -1,0 +1,46 @@
+
+{{ define "discord.tech.title" }} 
+ {{ if gt ( .Alerts.Firing | len) 0}}
+  Une alerte chez un client ! 🔴
+ {{ end }}
+ {{ if gt ( .Alerts.Resolved | len) 0}}
+  Bonne nouvelle ! 🪄
+ {{ end }}
+{{ end }}
+
+{{ define "discord.tech.annotations" }}
+ {{ if gt ( .Alerts.Firing | len) 0}}
+  {{ range .Alerts.Firing }}
+
+Nom de l'alerte :**{{ .Labels.alertname }}**
+-----------------------------------
+Alerte sur une machine cliente 
+- {{ .Labels.instance  }}
+Code d erreur :
+- **{{ .Labels.error_code }}**
+
+Consultez vos mails pour plus de détails 
+> **https://mail.cpnv.ch/ **  
+  
+Annotations:
+{{ range .Annotations.SortedPairs }}  - {{ .Name }} = {{ .Value }}
+{{ end }}
+
+Source: {{ .GeneratorURL | reReplaceAll "(ubuntu:9090)" "localhost:4090" }}  
+  
+ 🔔 Alert Powered By @LouC  
+
+  {{ end }}
+ {{end}}
+ {{ if gt ( .Alerts.Resolved | len) 0}}
+  {{ range .Alerts.Resolved }}
+
+L'alerte :**{{ .Labels.alertname }}**
+-------------------------------
+Est résolue ! 🥳
+
+ 🔔 Alert Powered By @Louc
+
+  {{ end }}
+ {{ end }}
+{{end}}

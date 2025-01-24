@@ -1,0 +1,34 @@
+{{ define "discord.client_warning.title" }} 
+ {{ if gt ( .Alerts.Firing | len) 0}}
+  Mince une alerte ! ⚠️
+ {{ end }}
+ {{ if gt ( .Alerts.Resolved | len) 0}}
+  Bonne nouvelle ! 🪄
+ {{ end }}
+{{ end }}
+
+{{ define "discord.client_warning.annotations" }}
+ {{ if gt ( .Alerts.Firing | len) 0}}
+  {{ range .Alerts.Firing }}
+
+Nom de l'alerte :** {{ .Labels.alertname }}**
+-----------------------------------
+Code à donner à votre téchnicien :
+- **{{ .Labels.error_code }}**
+Description:
+- **{{ .Labels.description_client }}**
+  {{ end }}
+🔔 Alert Powered By @LouC
+ {{end}}
+ {{ if gt ( .Alerts.Resolved | len) 0}}
+  {{ range .Alerts.Resolved }}
+  
+L'alerte :**{{ .Labels.alertname }}**
+-------------------------------
+Est résolue ! 🥳
+
+  {{ end }}
+🔔 Alert Powered By @Louc
+ {{ end }}
+{{end}}
+

@@ -1,0 +1,4 @@
+CREATE DATABASE prometheus
+CREATE USER prometheus WITH PASSWORD 'prometheus'
+GRANT ALL ON prometheus TO prometheus
+CREATE RETENTION POLICY "one_year" ON "prometheus" DURATION 360d REPLICATION 1 DEFAULT

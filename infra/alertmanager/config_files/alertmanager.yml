@@ -1,0 +1,73 @@
+global:
+  resolve_timeout: 10s
+  opsgenie_api_key: 31187b19-1f69-4639-8b75-3039b7b1e7ca
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 10m
+  receiver: default
+  routes:
+    - match:
+        alertname: DebianServiceDown
+        reboot: true
+      receiver: reboot
+      continue: true
+    - match:
+        severity: critical
+      receiver: default
+    - match:
+        severity: warning
+      receiver: warning
+
+## Inhibition rules allow to mute a set of alerts given that another alert is
+## firing.
+## We use this to mute any warning-level notifications if the same alert is
+## already critical.
+inhibit_rules:
+  - source_matchers: [severity="critical"]
+    target_matchers: [severity="warning"]
+    # Apply inhibition if the alertname is the same.
+    # CAUTION:
+    #   If all label names listed in `equal` are missing
+    #   from both the source and target alerts,
+    #   the inhibition rule will apply!
+    equal: [alertname]
+
+receivers:
+- name: 'reboot'
+  discord_configs:
+    - webhook_url: 'http://10.20.0.50:9000/hooks/redeploy-apache'
+
+- name: 'default'
+#  receiver: 'email'
+#  email_configs:
+#  - to: 'luca.bassi@cpnv.ch'
+#    from: 'luca.bassi@cpnv.ch'
+#    smarthost: email-smtp.eu-central-1.amazonaws.com:587
+#    auth_username: ''
+#    auth_identity: ''
+#    auth_password: ''
+
+  opsgenie_configs:
+    - message: '{{ template "discord.client_critical.annotations" . }}'
+    - priority: P1
+
+  discord_configs:
+
+  - webhook_url: 'https://discord.com/api/webhooks/1114168481395511326/uXI7Ui3B8_hDmyE6Dp5Ji7u_vAOJ1tXPGXHcOvbEP-1jFYZbspwpgqh7lwphL3jiOBaA'
+    title: '{{ template "discord.tech.title" . }}'
+    message: '{{ template "discord.tech.annotations" . }} '
+
+  - webhook_url: 'https://discord.com/api/webhooks/1117150657619689572/n15pJAUv4kQMnIcSUoYNm9153Orv3wQYQlRYEgP-qnpAbGB07kapzAjmyaRaVf7A2zj3'
+    title: '{{ template "discord.client_critical.title" . }}'
+    message: '{{ template "discord.client_critical.annotations" . }} '
+
+- name: 'warning'
+  discord_configs:
+  - webhook_url: 'https://discord.com/api/webhooks/1117150657619689572/n15pJAUv4kQMnIcSUoYNm9153Orv3wQYQlRYEgP-qnpAbGB07kapzAjmyaRaVf7A2zj3'
+    title: '{{ template "discord.client_warning.title" . }}'
+    message: '{{ template "discord.client_warning.annotations" . }} '
+
+templates:
+- '/etc/alertmanager/templates/*.tmpl'
