@@ -1,14 +1,11 @@
 # Kubernetes-Prometheus-Monitoring
-
-## Troubleshot
-
 ## Create secret to login to private docker registry
 
 ```sh
 kubectl create secret docker-registry reg-cred-secret --docker-server=$REGISTRY_NAME:5000 --docker-username=myuser --docker-password=mypasswd
 ```
-
-## Cluster 
+## Troubleshot
+### Cluster 
 ```bash
 #reset cluster 
 
@@ -33,13 +30,13 @@ sudo systemctl restart containerd
 #sudo kubeadm join...
 
 ```
-## ingress
+### ingress
 ```bash
 kubectl get validatingwebhookconfigurations 
 kubectl delete validatingwebhookconfigurations ingress-nginx-admission
 ```
 
-## Pods
+### Pods
 ```bash
 
 kubectl describe deployment
