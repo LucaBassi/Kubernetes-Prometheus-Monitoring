@@ -2,7 +2,7 @@
 
 ## Troubleshot
 
-## Create servet to login to private docker registry
+## Create secret to login to private docker registry
 
 ```sh
 kubectl create secret docker-registry reg-cred-secret --docker-server=$REGISTRY_NAME:5000 --docker-username=myuser --docker-password=mypasswd
