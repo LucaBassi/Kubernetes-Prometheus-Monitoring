@@ -59,15 +59,9 @@ kubectl logs <pod name> -n <namespace> --tail 50
 ```
 ### Ingress
 ```bash
-kubectl get ns 
-
-for example : ingress-nginx
-
-2- remove all resources in this namespace
+kubectl get ns
 
 kubectl delete all  --all -n ingress-nginx
-
-if your ingress controller is not installed in a dedicated namespace so you will have to remove resources one by one .
 
 kubectl delete ingress ingress-nginx
 kubectl delete deployment ingress-nginx
