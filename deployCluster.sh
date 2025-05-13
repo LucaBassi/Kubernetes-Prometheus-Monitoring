@@ -65,6 +65,9 @@ sudo sysctl --system
 # init Cluster
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
 
+#sudo systemctl enable --now kubelet
+#sudo kubeadm init --control-plane-endpoint=srv-rockykube-01 
+
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
